@@ -3,7 +3,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 
-// Bryanna Wilson – Part 2 (File I/O + Refactor)
 
 public class Adding_csv extends JFrame {
 
@@ -199,4 +198,5 @@ public class Adding_csv extends JFrame {
     public static void main(String[] args) {
         new Adding_csv();
     }
+
 }
