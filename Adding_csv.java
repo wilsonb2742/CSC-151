@@ -63,7 +63,7 @@ public class Adding_csv extends JFrame {
                 String[] values = line.split(",");
 
                 if (values.length >= 2) {
-                    String displayText = values[0] + " - " + values[1];
+                    String displayText = values[0] + " - " + values[1].trim(); // New!! ".trim();"
                     listModel.addElement(displayText);
                 }
             }
@@ -116,6 +116,23 @@ public class Adding_csv extends JFrame {
 
         String name = selectedItem.split(" - ")[0];
 
+        // New!!
+        
+        JDialog dialog = new JDialog(this, "Details", true);
+        dialog.setLayout(new BorderLayout());
+
+        JTextArea textArea = new JTextArea();
+        textArea.setEditable(false);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+
+        Font font = new Font("Arial", Font.BOLD, 14);
+        textArea.setFont(font);
+
+        StringBuilder messageBuilder = new StringBuilder();
+
+        // New!!
+        
         if (itemCategory.equals("Players")) {
             // Players CSV
             try (BufferedReader br = new BufferedReader(new FileReader("players.csv"))) {
@@ -124,24 +141,27 @@ public class Adding_csv extends JFrame {
 
                 while ((line = br.readLine()) != null) {
                     String[] values = line.split(",");
-                    if (values[0].equals(name)) {
-                        String message =
-                                "Name: " + values[0] +
-                                "\nPosition: " + values[1] +
-                                "\nNumber: " + values[2] +
-                                "\nHeight: " + values[3] +
-                                "\nWeight: " + values[4] +
-                                "\nAge: " + values[5] +
-                                "\nExp: " + values[6] +
-                                "\nCollege: " + values[7];
+                    if (values[0].trim().equals(name)) {   // New!!  ".trim()."
 
-                        JOptionPane.showMessageDialog(this, message);
-                        return;
+                        // New!!
+
+                        messageBuilder.append("Name: ").append(values[0]).append("\n")
+                                      .append("Position: ").append(values[1]).append("\n")
+                                      .append("Number: ").append(values[2]).append("\n")
+                                      .append("Height: ").append(values[3]).append("\n")
+                                      .append("Weight: ").append(values[4]).append("\n")
+                                      .append("Age: ").append(values[5]).append("\n")
+                                      .append("Exp: ").append(values[6]).append("\n")
+                                      .append("College: ").append(values[7]);
+                        break;
+
+                        // New!!
                     }
                 }
 
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this, "Error reading details.");
+                return; // New!!
             }
 
         } else if (itemCategory.equals("Coaches/Staff")) {
@@ -152,14 +172,16 @@ public class Adding_csv extends JFrame {
 
                 while ((line = br.readLine()) != null) {
                     String[] parts = line.split(",", 3); // split into Name, Title, Description
-                    if (parts.length >= 3 && parts[0].equals(name)) {
-                        String message =
-                                "Name: " + parts[0] +
-                                "\nTitle: " + parts[1] +
-                                "\n" + parts[2];
+                    if (parts.length >= 3 && parts[0].trim().equals(name)) {  // New!! ".trim()."
 
-                        JOptionPane.showMessageDialog(this, message);
-                        return;
+                        // New!!
+
+                        messageBuilder.apprend("Name: ").append(parts[0].trim()).append("\n")
+                                      .apprend("Title: ").append(parts[1].trim()).append("\n")
+                                      .append(parts[2].trim());
+                        break;
+
+                        // New!!
                     }
                 }
 
@@ -167,6 +189,18 @@ public class Adding_csv extends JFrame {
                 JOptionPane.showMessageDialog(this, "Error reading details.");
             }
         }
+
+        // New!!
+        
+        textArea.setText(messageBuilder.toString());
+        textArea.setPreferredSize(new Dimension(400,200));
+        dialog.add(new JScrollPane(textArea), BorderLayout.CENTER);
+
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+        
+        // New!!
     }
 
     // ===============================
@@ -200,3 +234,4 @@ public class Adding_csv extends JFrame {
     }
 
 }
+
